@@ -1,0 +1,54 @@
+---
+title: "The Relationship Between Annual Income and Car Price"
+author: "Raihan Athallah"
+date: "2024-12-02"
+categories: [code]
+image: "Car_sales.png"
+---
+
+## Relationship Between Annual Income and Car Price
+
+Dataset Source: [Car Sales Report Dataset](https://www.kaggle.com/datasets/missionjee/car-sales-report)
+
+The scatter plot below shows the relationship between **Annual Income** and **Car Price** based on data from a car sales dataset. This data gives insights into car-buying behavior, showing how income influences purchasing decisions.
+
+One of the key insights I noticed was that those with higher income levels are linked to higher car prices. The red line within the graph confirmed this by highlighting the relationship between the two variables. While this is true for most, there are some outliers, with some individuals with low incomes purchasing more expensive cars; they are likely to do this through financing or savings. On the other hand, some high-income buyers choose to buy budget-friendly vehicles, which could reflect their priorities or preferences for the car's practicalities instead.
+
+From the key insights I gained, this visualization is especially useful for car dealerships and manufacturers. Understanding the relationship between income and car prices could help them target the right audience and offer products to a broader range of customers. Lastly, it would be fun to see how this relationship will grow with the rise of electric and alternative fuel vehicles. With new trends, we could see a shift in how income influences people's choice of cars, and exploring further on this could reveal even more information on consumer behavior.
+
+```{r}
+
+# Load necessary libraries
+library(ggplot2)
+library(dplyr)
+
+# Load the dataset
+car_sales_data <- read.csv("data/car_sales.csv") 
+
+# Checking column names
+colnames(car_sales_data)
+
+# Filter out any missing or invalid data
+car_sales_filtered <- car_sales_data %>%
+  filter(!is.na(Annual.Income) & !is.na(Price....)) 
+
+# Convert income and price to thousands
+car_sales_filtered <- car_sales_filtered %>%
+  mutate(
+    Annual.Income.Thousands = Annual.Income / 1000,
+    Price.Thousands = Price.... / 1000
+  )
+
+# Scatter plot of Car Price vs. Annual Income
+ggplot(car_sales_filtered, aes(x = Price.Thousands, y = Annual.Income.Thousands)) +
+  geom_point(alpha = 0.5, color = "blue") + # Add scatter points
+  geom_smooth(method = "lm", se = FALSE, color = "red", linetype = "dashed") +
+  labs(
+    title = "Relationship Between Car Price and Annual Income",
+    x = "Car Price (in thousands $)",
+    y = "Annual Income (in thousands $)"
+  ) +
+  theme_minimal()
+
+
+```

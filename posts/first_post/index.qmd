@@ -1,0 +1,54 @@
+---
+title: "Top 10 Most Popular Categories by Total Installs"
+author: "Raihan Athallah"
+date: "2024-12-02"
+categories: [code]
+image: "Play_store_img.png"
+---
+
+## Top 10 Most Popular Categories by Total Installs 
+
+Dataset Source: [Google Play Store Apps Dataset](https://www.kaggle.com/datasets/lava18/google-play-store-apps)
+
+The graph below highlights the **Top 10 Most Popular Categories by Total Installs** on the Google Play Store. Coming at number one as the category with the total installs is gaming apps, with the category-leading the cart with over 30 billion installs; this shows the immense popularity of mobile gaming on a global scale. In second place are communication apps, such as messaging and social media apps, showing how essential their role is in helping people connect. Productivity apps hold the third position, showing how tools are designed to improve efficiency and organization.
+
+Other categories, including social, tools, family, and photography apps, follow with moderate popularity but significantly fewer installs compared to the top three. This analysis provides valuable insights into user behavior, illustrating the types of apps that drive the most engagement on the Play Store. Through this data and visualization, developers and businesses can use this information to focus on high-demand categories or identify gaps in the market for new opportunities. This also showed the world's current priorities in life, such as the need for entertainment, connectivity, and productivity. 
+
+In the future, I would like to know whether there will be a change in trend, especially with the rise of AI. With the rate of AI evolution, we could see growth in other categories, such as education and health. It will be fascinating to see how it all turns out in the near future.
+
+```{r}
+
+# libraries
+library(ggplot2)
+library(dplyr)
+
+# The dataset
+google_play_data <- read.csv("data/googleplaystore.csv")
+
+
+
+# Summarizing installs by category
+category_installs <- google_play_data %>%
+  group_by(Category) %>%
+  summarize(Total_Installs = sum(Installs, na.rm = TRUE)) %>%
+  arrange(desc(Total_Installs))
+
+# Get the top 10 categories
+top_10_categories <- head(category_installs, 10)
+
+# Convert installs to billions
+top_10_categories <- top_10_categories %>%
+  mutate(Total_Installs_Billions = Total_Installs / 1e9)
+
+# Bar chart of the top 10 categories by total installs
+ggplot(top_10_categories, aes(x = reorder(Category, -Total_Installs_Billions), y = Total_Installs_Billions)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(
+    title = "Top 10 Most Popular Categories by Total Installs",
+    x = "Play Store App Category",
+    y = "Total Installs (in billions)"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
